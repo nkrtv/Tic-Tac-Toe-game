@@ -1,0 +1,22 @@
+.game {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#gameBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    border: 1px solid #0a0404;
+    border-radius: 25px;
+    background: var(--ceels-background);
+}

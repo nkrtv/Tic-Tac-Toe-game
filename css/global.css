@@ -1,0 +1,82 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    scroll-behavior: smooth;
+    cursor: pointer;
+
+    /*  all text font */
+    --font-family: 'Salsa', cursive;
+
+    /* colors */
+    --main-color: #292F36;
+    --secondary-color: #ca5b1b;
+    --btn-text-color:#d6ae64;
+
+    /* background colors */
+    --body-background: linear-gradient(to top, #d6ae64, #dd9f88);
+    --burger-header-background: linear-gradient(to top, #d6ae64, #e09f87);
+    --burger-btn-background: #000000;
+    --input-background: #e9d3d0;
+    --ceels-background: linear-gradient(to bottom, #d6ae64, #dd9f88);
+
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--body-background);
+    font-family: var(--font-family);
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width:1024px) {
+    main {
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: baseline;
+    }
+}
+
+@media (min-width:1440px) {
+    main {
+        padding: 0 250px;
+    }
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1,
+h2 {
+    font-size: 40px;
+    color: var(--main-color);
+}
+
+h2 {
+    margin: 30px 0;
+}
+
+.btn {
+    margin-top: 30px;
+    width: 200px;
+    height: 50px;
+    font-size: 18px;
+    font-family: var(--font-family);
+    color: var(--btn-text-color);
+    background-color: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 25px;
+    cursor: pointer;
+}

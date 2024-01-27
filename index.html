@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Salsa&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <header class="header">
+        <a href="#" class="header__logo">
+            <h1>Tic Tac Toe</h1>
+        </a>
+        <div class="header__burger-menu-btn">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <div class="header__nav">
+            <button class="nav__btn" id="twoPlayersBtn">Two players</button>
+            <button class="nav__btn" id="playWithComputerBtn">Play with Computer</button>
+        </div>
+    </header>
+    <main>
+        <div class="info">
+            <div class="form-container" id="twoPlayersFormContainer">
+                <!-- Form for Two Players -->
+                <form id="twoPlayersForm">
+                    <div class="player">
+                        <label for="player1Name">Player Name (X):</label>
+                        <input type="text" id="player1Name" placeholder="Name" required>
+                    </div>
+                    <div class="player">
+                        <label for="player2Name">Player Name (O):</label>
+                        <input type="text" id="player2Name" placeholder="Name" required>
+                    </div>
+                </form>
+            </div>
+            <div class="form-container" id="playWithComputerFormContainer">
+                <!-- Form for Play with Computer -->
+                <form id="playWithComputerForm">
+                    <div class="player">
+                        <label for="playerName">Your Name(X):</label>
+                        <input type="text" id="playerName" placeholder="Name" required>
+                        <p>Computer wil be play like O!</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="game">
+            <h2 id="title">Let`s play!</h2>
+            <div id="gameBoard"></div>
+            <button class="btn" id="startButton">Start new game</button>
+        </div>
+        <div class="results">
+            <h2>Winners!</h2>
+            <!-- Results for Two Players -->
+            <ul id="twoPlayersResultsList"></ul>
+
+            <!-- Results for Play with Computer -->
+            <ul id="computerResultsList"></ul>
+            <button class="btn" id="clearResultsBtn">Clear Results</button>
+        </div>
+    </main>
+    <script src="https://unpkg.com/html-data-include@3.3.3/html-data-include.js"></script>
+    <script type="module" src="js/index.js"></script>
+</body>
+
+</html>
