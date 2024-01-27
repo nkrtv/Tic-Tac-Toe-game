@@ -61,7 +61,7 @@
 .nav__btn:hover,
 .nav__btn.active {
     color: var(--secondary-color);
-    font-size: 20px;
+    font-size: 27px;
     font-style: normal;
 }
 
@@ -136,11 +136,6 @@ body.active {
     .nav__btn {
         margin-bottom: 0;
         margin-right: 50px;
-        font-size: 21px;
-    }
-
-    .nav__btn:hover {
-        font-size: 22px;
     }
 }
 
@@ -154,10 +149,5 @@ body.active {
         margin-right: 30px;
         margin-bottom: 0;
         margin-right: 50px;
-        font-size: 24px;
-    }
-
-    .nav__btn:hover {
-        font-size: 25px;
     }
 }
