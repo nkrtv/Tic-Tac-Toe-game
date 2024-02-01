@@ -4,8 +4,7 @@
     align-items: center;
 }
 
-#twoPlayersResultsList li,
-#computerResultsList li {
+#ResultsList li {
     margin-bottom: 10px;
     font-size: 20px;
     color: var(--main-color);

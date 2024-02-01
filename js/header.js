@@ -4,11 +4,13 @@ class BurgerMenu {
         this.headerNav = document.querySelector(navSelector);
         this.body = document.querySelector(bodySelector);
 
+        // Initialize the event during class creation 
         this.init();
     }
 
-    // Add active class
+    // Add or remove active class
     toggleMenu() {
+        // get object properties using destructuring
         const { burgerMenuBtn, headerNav, body } = this;
 
         burgerMenuBtn.classList.toggle('active');

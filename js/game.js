@@ -25,9 +25,12 @@ class GameMode {
 
 
         // Add event listeners to buttons
-        document.getElementById("twoPlayersBtn").addEventListener("click", this.startTwoPlayersGame.bind(this));
-        document.getElementById("playWithComputerBtn").addEventListener("click", this.startPlayWithComputerGame.bind(this));
-        this.startButton.addEventListener("click", this.startGame.bind(this));
+        document.getElementById("twoPlayersBtn").addEventListener("click", () => this.startTwoPlayersGame());
+        document.getElementById("playWithComputerBtn").addEventListener("click", () => this.startPlayWithComputerGame());
+        this.startButton.addEventListener("click", () => this.startGame());
+
+        // Add event listener to clear results button
+        document.getElementById('clearResultsBtn').addEventListener('click', () => this.clearResults());
 
         // Render the bord and list of results
         this.renderBoard();
@@ -39,6 +42,7 @@ class GameMode {
         this.toggleActiveButton("twoPlayersBtn");
         this.updateFormsVisibility();
         this.startGame();
+        
     }
 
     // Toggle the active state of nav buttons
@@ -63,6 +67,23 @@ class GameMode {
         this.startGame();
     }
 
+    renderBoard() {
+        // Clears the contents of an element
+        this.gameBoardElement.innerHTML = "";
+
+        for (let i = 0; i < this.boardSize; i++) {
+            for (let j = 0; j < this.boardSize; j++) {
+                // Create cells
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.value = "";
+                cell.addEventListener("click", (event) => this.tap(event));
+                this.gameBoardElement.appendChild(cell);
+                this.cells.push(cell);
+            }
+        }
+    }
+
     // Check if is victory
     isVictory() {
         for (let combo of this.combos) {
@@ -77,36 +98,23 @@ class GameMode {
         return false;
     }
 
-    renderBoard() {
-        this.gameBoardElement.innerHTML = "";
-        for (let i = 0; i < this.boardSize; i++) {
-            for (let j = 0; j < this.boardSize; j++) {
-                const cell = document.createElement("div");
-                cell.classList.add("cell");
-                cell.dataset.index = i * this.boardSize + j;
-                cell.dataset.value = "";
-                cell.addEventListener("click", this.tap.bind(this));
-                this.gameBoardElement.appendChild(cell);
-                this.cells.push(cell);
-            }
-        }
-    }
-
     // Event when a cell is clicked
-    tap(event) {
-        // Check if the game isn`t over
-        if (!this.gameOver && event.target.children.length === 0) {
-            
+    tap = (event) => {
+        // Check if the game isn't over
+        if (!this.gameOver && event.currentTarget.innerHTML === "") {
+
             // Choose the symbol
             const symbol = this.counter % 2 === 0 ? '<img src="img/close.png" width = 50>' : '<img src="img/circle.png" width = 50>';
-            event.target.innerHTML = symbol;
-            
-            // Check  the conditions of victory
+            event.currentTarget.innerHTML = symbol;
+
+            // Check the conditions of victory
             if (this.isVictory()) {
                 this.gameOver = true;
-                this.cells.forEach((cell) => cell.removeEventListener("click", this.tap.bind(this)));
 
-                // Choose the winer`s name and symbol
+                // Make cells not active to tap
+                this.cells.forEach(cell => cell.removeEventListener("click", this.tap));
+
+                // Choose the winner's name and symbol
                 let winnerName = "";
                 let winnerSymbol = "";
                 if (this.gameMode === "twoPlayers") {
@@ -114,16 +122,17 @@ class GameMode {
                     winnerSymbol = this.counter % 2 === 0 ? 'X' : 'O';
                     this.title.innerText = `${winnerName} ${winnerSymbol} wins!`;
                 } else {
-                    winnerName = this.counter % 2 === 0 ? document.getElementById("playerName").value : "Computer";
+                    winnerName = this.counter % 2 === 0 ? document.getElementById("playerName").value : "";
                     winnerSymbol = this.counter % 2 === 0 ? 'You' : 'Computer';
-                    this.title.innerText = `${winnerSymbol} win`;
+                    this.title.innerText = `${winnerSymbol} win!`;
                 }
 
                 // Update results
                 this.updateResults(winnerName, winnerSymbol);
                 this.updateResultsUI();
-            } else if (this.counter === this.boardSize * this.boardSize - 1) {
-                // If no victory and the board is full - draw
+            }
+            // If no victory and the board is full - draw
+            else if (this.counter === this.boardSize * this.boardSize - 1) {
                 this.gameOver = true;
                 this.title.innerText = "Draw!";
             }
@@ -131,17 +140,20 @@ class GameMode {
             this.counter++;
 
             // Remove click event listener from the clicked cell
-            event.target.removeEventListener("click", this.tap.bind(this));
+            event.currentTarget.removeEventListener("click", this.tap);
 
-            // Trigger the computer's move if playing with computer
+            // Trigger the computer's move if playing with the computer
             if (this.gameMode === "playWithComputer" && !this.gameOver && this.counter % 2 !== 0) {
-                setTimeout(() => this.computerMove(), 500);
+                setTimeout(() => this.computerMove(), 500); 
             }
         }
-    }
+    };
+
 
     computerMove() {
+        // Looking for empty cells
         const emptyCells = this.cells.filter(cell => cell.innerHTML === "");
+        // Random move
         if (emptyCells.length > 0) {
             const randomIndex = Math.floor(Math.random() * emptyCells.length);
             emptyCells[randomIndex].click();
@@ -157,33 +169,6 @@ class GameMode {
         this.updateFormsVisibility();
     }
 
-    updateResults(winnerName, symbol) {
-        try {
-          const resultsKey = this.gameMode === "twoPlayers" ? 'twoPlayersResults' : 'computerResults';
-          const results = JSON.parse(localStorage.getItem(resultsKey)) || [];
-          results.push(`${winnerName} ${symbol} wins!`);
-          localStorage.setItem(resultsKey, JSON.stringify(results));
-        } catch (error) {
-          console.error("Error updating results:", error);
-        }
-      }
-
-      updateResultsUI() {
-        this.updateListUI('twoPlayersResults', 'twoPlayersResultsList');
-        this.updateListUI('computerResults', 'computerResultsList');
-      }
-
-      updateListUI(resultsKey, listElementId) {
-        const results = JSON.parse(localStorage.getItem(resultsKey)) || [];
-        const listElement = document.getElementById(listElementId);
-        listElement.innerHTML = '';
-        results.forEach(result => {
-          const listItem = document.createElement('li');
-          listItem.innerHTML = result;
-          listElement.appendChild(listItem);
-        });
-      }
-
     // Update the visibility of player input forms based on the game mode
     updateFormsVisibility() {
         if (this.gameMode === "twoPlayers") {
@@ -195,15 +180,41 @@ class GameMode {
         }
     }
 
+    updateResults(winnerName, symbol) {
+        try {
+            const resultsKey = 'allResults'; 
+            // Get list of results
+            const results = JSON.parse(localStorage.getItem(resultsKey)) || [];
+            // Add new results
+            results.push(`${winnerName} ${symbol} wins!`);
+            // Save in local storage
+            localStorage.setItem(resultsKey, JSON.stringify(results));
+        } catch (error) {
+            console.error("Error updating results:", error);
+        }
+    }                        
+
+    updateListUI(resultsKey, listElementId) {
+        const results = JSON.parse(localStorage.getItem(resultsKey)) || [];
+        // Get html item to add results from local storage
+        const listElement = document.getElementById(listElementId);
+        listElement.innerHTML = '';
+        results.forEach(result => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = result;
+            listElement.appendChild(listItem);
+        });
+    }
+
+    updateResultsUI() {                                       
+        this.updateListUI('allResults', 'ResultsList');  
+    }
+
     clearResults() {
-        localStorage.removeItem('twoPlayersResults');
-        localStorage.removeItem('computerResults');
+        localStorage.removeItem('allResults'); 
         this.updateResultsUI();
     }
+    
 }
 
 const ticTacToe = new GameMode();
-
-// Add event listener to clear results button
-const clearResultsBtn = document.getElementById('clearResultsBtn');
-clearResultsBtn.addEventListener('click', () => ticTacToe.clearResults());
